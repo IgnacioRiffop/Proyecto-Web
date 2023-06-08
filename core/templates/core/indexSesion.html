@@ -1,0 +1,99 @@
+{% extends 'core/baseSesion.html' %}
+{% load static%}
+
+{% block css %}
+  
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+  <!-- Bienvenido -->
+  <div class="container-fluid suscribir fondo d-flex flex-column justify-content-center align-items-center">
+    <div class="text-center text-white">
+      <h1 class="display-1">
+        Bienvenid@!
+      </h1>
+      <div>Todas las compras y suscripciones seran destinadas a una fundación sin fines de lucro.</div>
+    </div>
+  </div>
+  <!-- Fin Bienvenido -->
+
+  <!-- Suscripcion -->
+  <section class="py-2 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">¿Quieres Suscribirte?</h1>
+        <p class="lead text-muted">Estarás ayudando y además obtendrás un 5% de descuento en el total de tu compra!
+        </p>
+        <p>
+          <a href="{% url 'suscripcion' %}" class="btn btn-verde my-1">Suscribirse</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Fin Suscripcion -->
+
+
+  <!-- Tienda -->
+  <div class="album py-1 bg-light">
+    <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'core/img/collarblanco.jpg' %}" class="responsive" width="100%" height="225">
+
+            <div class="card-body">
+              <p class="card-text">Collar para Perro Martingale WhiteOwl</p>
+              <p class="card-text fw-bold">$30.250</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{% url 'producto' %}" class="btn btn-verde">Ver Más</a>
+                </div>
+                <small class="text-muted">Stock: 6</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-sm">
+              <img src="{% static 'core/img/arnesverdedog.jpg' %}" class="responsive" width="100%" height="225">
+  
+              <div class="card-body">
+                <p class="card-text">Arnes H Hawkins Stranger Things para Perro</p>
+                <p class="card-text fw-bold">$12.900</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a href="#" class="btn btn-verde">Ver Más</a>
+                  </div>
+                  <small class="text-muted">Stock: 2</small>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'core/img/collarnegrocat.png' %}" class="responsive" width="100%" height="225">
+            <div class="card-body">
+              <p class="card-text">Gotham Collar Gato</p>
+              <p class="card-text fw-bold">$13.100</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="#" class="btn btn-verde">Ver Más</a>
+                </div>
+                <small class="text-muted">Stock: 4</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Fin Tienda-->
+
+  {% endblock %}
+  <!-- FIN CONTENIDO -->
+  {% block js %}
+  
+  {% endblock %}

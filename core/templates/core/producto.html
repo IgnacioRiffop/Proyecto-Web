@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block css %}
+
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+
+<!-- Contenido -->
+<div class="container py-5">
+  <div class="row">
+    <!-- Lateral izq -->
+    <div class="col-sm-6 col-izq ">
+      <div class="row producto">
+        <div class="card shadow-sm">
+          <img src="{{ producto.imagen.url }}" class="responsiveProd" width="100%" height="350">
+        </div>
+      </div>
+    </div>
+    <!-- Fin Lateral izq -->
+
+    <!-- Lateral der -->
+    <div class="col-sm-6">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="col-6">
+          <p class="fs-3">{{ producto.nombre }}</p>
+          <p class="fs-4 fw-bold">${{ producto.precio }}</p>
+          {{form | crispy}}
+        </div>
+        <div class="col-12">
+          {% if user.is_authenticated %}
+          <div class="col-12">
+            <input type="submit" class="btn btn-verde btn-lg my-3" value="Agregar al carrito">
+          </div>
+          {% else %}
+          <a href="carrito.html" class="btn btn-success btn-lg mt-3 disabled">Agregar al carrito</a>
+          <div class="d-flex gap-1 mt-1">
+            <a href="{% url 'registro' %}" class="text-decoration-none fw-semibold ltr-verde">Regístrate</a>
+            <div>/</div>
+            <a href="{% url 'login' %}" class="text-decoration-none fw-semibold ltr-verde">Inicia Sesíon </a>
+            <div> para comprar en la tienda!</div>
+          </div>
+          {% endif %}
+        </div>
+      </form>
+      <div class="col-12 mt-3">
+        <p class="fs-5 my-1">Descripción</p>
+        <p class="fs-6 my-1">{{ producto.descripcion }}</p>
+      </div>
+
+    </div>
+
+    <!-- Fin Lateral der -->
+
+  </div>
+  <!-- Fin Contenido -->
+
+  {% endblock %}
+  <!-- FIN CONTENIDO -->
+  {% block js %}
+
+  {% endblock %}

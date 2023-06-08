@@ -1,0 +1,60 @@
+{% extends 'core/baseSesion.html' %}
+{% load static%}
+
+{% block css %}
+  
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+
+<!-- Contenido -->
+<div class="container py-5">
+    <div class="row">
+        <!-- Lateral izq -->
+        <div class="col-sm-6 col-izq ">
+            <div class="row producto">
+                <div class="card shadow-sm">
+                    <img src="{% static 'core/img/collarblanco.jpg'%}" class="responsiveProd" width="100%" height="350">
+                </div>
+            </div>
+        </div>
+        <!-- Fin Lateral izq -->
+
+        <!-- Lateral der -->
+        <div class="col-sm-6">
+            <div class="col-12">
+                <p class="fs-3">Collar Martingale WhiteOwl Perro</p>
+                <p class="fs-4 fw-bold">$30.250</p>
+                <div class="btn-group mt-2" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn btn-outline-success" for="btnradio1"> S </label>
+
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                    <label class="btn btn-outline-success" for="btnradio2"> M </label>
+
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                    <label class="btn btn-outline-success" for="btnradio3"> L </label>
+                </div>
+            </div>
+            <div class="col-12">
+                <a href="carrito.html" class="btn btn-verde btn-lg my-3">Agregar al carrito</a>
+            </div>
+            <div class="col-12">
+                <p class="fs-5 my-1">Descripción</p>
+                <p class="fs-6 my-1">Collar para perros anti tirones con diseño de líneas en blanco y negro Tela hecha
+                    de poliéster Gancho de acero Tela suave para cuidar el cuello de tu perro</p>
+            </div>
+
+        </div>
+
+        <!-- Fin Lateral der -->
+
+    </div>
+    <!-- Fin Contenido -->
+
+    {% endblock %}
+    <!-- FIN CONTENIDO -->
+    {% block js %}
+  
+    {% endblock %}

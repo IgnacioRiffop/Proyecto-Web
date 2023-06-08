@@ -1,0 +1,141 @@
+{% extends 'core/base.html' %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block css %}
+  
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+
+<!-- Contenido -->
+<div class="container py-5">
+    <div class="row">
+        <!-- Lateral izq -->
+        <div class="col-sm-5">
+            <div class="row perfil">
+                <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
+                    <form action="{% url 'voucher' %}" method="POST">
+                        <h5>Hola, Ignacio</h5>
+                        <p>Ingresa los datos para completar tu compra.</p>
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <br>
+                        <h6>Subtotal: ${{subtotal}}</h6>
+                        <h6>Descuento: ${{descuento}}</h6>
+                        <h6>Envio: ${{envio}}</h6>
+                        <h6>Total: ${{total}}</h6>
+                        <h6>Valor dolar: ${{valorusd}}CLP</h6>
+                        <h6>Total dolar: ${{totalusd}}USD</h6>
+                        <p><div id="btnPaypal"></div></p>
+                        <input type="submit" class="btn btn-verde" value="Pagar">
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-12">
+            </div>
+        </div>
+        <!-- Fin Lateral izq -->
+
+        <!-- Lateral der -->
+        <div class="col-sm-7">
+            <h5 class="">Carrito</h5>
+            {% if existe == False %}
+                <h5 class="text-muted">No hay ningún producto añadido.</h5>
+            {% endif %}
+            {% for carrito in listado %}
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ carrito.producto.imagen.url }}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ carrito.producto.nombre }}</h5>
+                                <p class="card-text">${{ carrito.producto.precio }}</p>
+                                <div class="row">
+                                    <h6 class="text-muted">Cantidad: {{ carrito.cantidad }}</h6>
+                                </div>
+                                <a onclick="deleteCarrito({{ carrito.id }})" class="btn btn-danger btn-sm">Quitar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Fin Lateral der -->
+    </div>
+</div>
+<!-- Fin Contenido -->
+
+{% endblock %}
+<!-- FIN CONTENIDO -->
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'core/js/mensajeCarrito.js' %}"></script>
+  <script src="http://www.paypalobjects.com/api/checkout.js"></script>
+  <script>
+    paypal.Button.render({
+        env: 'sandbox',
+        client: {
+            sandbox: 'AdHg400qtB4n0TwvakfNs2TV5kNyyzGRW7YrBQ9OyGLutgMpYy1SQmGYpiGe3JQtRu4CZB8UzubXz9B0',
+            production: 'demo_production_client_id'
+        },
+        locale: 'es_CL',
+        style: {
+            size: 'large', //small, medium, large
+            color: 'gold', // gold, black
+            shape: 'rect' // pill, rect
+        },
+        commit: true,
+        payment: function (data, actions) {
+            return actions.payment.create({
+                transactions: [{
+                    amount: {
+                        total: '{{totalusd}}', //MONTO A PAGAR
+                        currency: 'USD'
+                    }
+                }]
+            });
+        },
+        onAuthorize: function(data, actions) {
+            return actions.payment.execute().then(function() {
+                Swal.fire({
+                    title: 'Transacción',
+                    text: 'Pago realizado correctamente!',
+                    icon: 'success',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar'
+                }).then(function() {
+                    window.location.href = '/';
+                });
+            });
+        },
+        onCancel(data){
+            Swal.fire({
+                title: 'Transacción Cancelada',
+                text: 'El pago ha sido cancelado!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar'
+            });
+        },
+        onError(err){
+            Swal.fire({
+                title: 'Error Transacción',
+                text: 'Ha ocurrido un error en el pago!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    }, '#btnPaypal');
+  </script>
+{% endblock %}
