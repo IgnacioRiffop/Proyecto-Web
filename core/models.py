@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -34,7 +35,7 @@ class Cliente(models.Model):
         return self.usuario
     
 class Carrito(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
 
@@ -57,7 +58,7 @@ class TipoSuscripcion(models.Model):
         return self.nombre
     
 class Suscripcion(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     suscripcion = models.ForeignKey(TipoSuscripcion, on_delete=models.CASCADE)
 
     def __str__(self):

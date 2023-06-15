@@ -80,8 +80,10 @@ def indexApi(request):
     }
     return render(request, 'core/indexApi.html', data)
 
+"""
 def indexSesion(request):
     return render(request, ('core/indexSesion.html'))
+"""
 
 # CRUD PRODUCTO
 def addProducto(request):
@@ -122,7 +124,7 @@ def deleteProducto(request, id):
 
 @grupo_requerido('cliente')
 def carrito(request):
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.get(username=request.user.username)
     CarritoCliente = Carrito.objects.filter(cliente=cliente)
     existe = CarritoCliente.exists()
     respuesta = requests.get('https://mindicador.cl/api/dolar').json()
@@ -184,8 +186,10 @@ def tienda(request):
     }
     return render(request, 'core/tienda.html', data)
 
+"""
 def tiendaSesion(request):
     return render(request, ('core/tiendaSesion.html'))
+"""
 
 def login(request):
     return render(request, ('core/login.html'))
@@ -196,7 +200,7 @@ def registro(request):
 def producto(request, id):
     producto = Producto.objects.get(id=id)
     try:
-        cliente = Cliente.objects.get(usuario=request.user.username)
+        cliente = User.objects.get(username=request.user.username)
     except Cliente.DoesNotExist:
         cliente = None
     data = {
@@ -215,19 +219,22 @@ def producto(request, id):
             
     return render(request, ('core/producto.html'), data)
 
+"""
 def productoSesion(request):
     return render(request, ('core/productoSesion.html'))
+"""
 
 def suscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
     
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.filter(username=request.user.username)[:1]
     try:
         suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     except Suscripcion.DoesNotExist:
         suscripcionCliente = None
+
 
     data = {
         'basica': basica,
@@ -243,7 +250,7 @@ def suscripcionAdmin(request):
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
     
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.filter(username=request.user.username)[:1]
     try:
         suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     except Suscripcion.DoesNotExist:
@@ -263,7 +270,7 @@ def miSuscripcion(request):
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
     
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.filter(username=request.user.username)[:1]
     try:
         suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     except Suscripcion.DoesNotExist:
@@ -280,19 +287,19 @@ def miSuscripcion(request):
 
 # CRUD Suscripcion
 def addSuscripcion(request, id):
-    cliente = Cliente.objects.get(usuario=request.user.username)
+    cliente = User.objects.get(username=request.user.username)
     tipoSuscripcion = TipoSuscripcion.objects.get(id=id)
     suscripcion = Suscripcion.objects.create(cliente=cliente, suscripcion=tipoSuscripcion)
     return redirect(to='suscripcion')
 
 def deleteSuscripcion(request, id):
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.get(username=request.user.username)
     suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     suscripcionCliente.delete()
     return redirect(to='suscripcion')
 
 def updateSuscripcion(request, id):
-    cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
+    cliente = User.objects.get(username=request.user.username)
     tipoSuscripcion = TipoSuscripcion.objects.get(id=id)
     suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     suscripcionCliente.suscripcion = tipoSuscripcion
