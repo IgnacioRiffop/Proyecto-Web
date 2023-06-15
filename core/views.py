@@ -214,15 +214,23 @@ def producto(request, id):
         if formulario.is_valid():
             try:
                 CarritoCP = Carrito.objects.get(cliente=cliente,producto=producto)
+                cantidadstock = CarritoCP.cantidad+producto.stock
                 CarritoCP.cantidad = CarritoCP.cantidad + int(formulario.data["cantidad"])
-                if CarritoCP.cantidad > producto.stock:
-                    CarritoCP.cantidad = producto.stock
+                if CarritoCP.cantidad > cantidadstock:
+                    CarritoCP.cantidad = cantidadstock
                     CarritoCP.save()
+                    producto.stock = 0
                 else:
                     CarritoCP.save()
+                    producto.stock = producto.stock-int(formulario.data["cantidad"])
             except Carrito.DoesNotExist:
-                carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=formulario.data["cantidad"])
-
+                if int(formulario.data["cantidad"]) > producto.stock:
+                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=producto.stock)
+                    producto.stock = 0
+                else:
+                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=int(formulario.data["cantidad"]))
+                    producto.stock = producto.stock-int(formulario.data["cantidad"])
+    producto.save()
             
     return render(request, ('core/producto.html'), data)
 
@@ -383,7 +391,9 @@ def adminProductos(request):
 # CRUD CARRITO
 def deleteCarrito(request, id):
     itemCarrito = Carrito.objects.get(id=id)
-    usuario = itemCarrito.cliente
+    producto = Producto.objects.get(nombre=itemCarrito.producto.nombre)
+    producto.stock = producto.stock+itemCarrito.cantidad
+    producto.save()
     itemCarrito.delete()
     return redirect(to='carrito')
 # FIN CRUD CARRITO
