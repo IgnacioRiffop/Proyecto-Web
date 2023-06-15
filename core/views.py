@@ -7,7 +7,23 @@ import datetime
 from .serializers import *
 from rest_framework import viewsets
 import requests
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, user_passes_test
 # Create your views here.
+
+#FUNCION GENERICA QUE VALIDA EL GRUPO DEL USUARIO
+def grupo_requerido(nombre_grupo):
+    def decorator(view_fuc):
+        @user_passes_test(lambda user: user.groups.filter(name=nombre_grupo).exists())
+        def wrapper(request, *arg, **kwargs):
+            return view_fuc(request, *arg, **kwargs)
+        return wrapper
+    return decorator
+
+# @grupo_requerido('vendedor')
+# CUANDO CREAN EL USUARIO LO ASIGNA INMEDIATAMENTE AL GRUPO
+# grupo = Grupo.objects.get(name='cliente')
+# user.groups.add(grupo)
 
 # NOS PERMITE MOSTRAR LA INFO
 class ProductoViewset(viewsets.ModelViewSet):
@@ -104,7 +120,7 @@ def deleteProducto(request, id):
     return redirect(to='adminProductos')
 # FIN CRUD PRODUCTO
 
-
+@grupo_requerido('cliente')
 def carrito(request):
     cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
     CarritoCliente = Carrito.objects.filter(cliente=cliente)

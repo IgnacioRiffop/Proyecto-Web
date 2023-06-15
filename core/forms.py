@@ -43,3 +43,5 @@ class envioForm (ModelForm):
     class Meta:
         model = Compras
         fields = ['direccion','contacto']
+
+
