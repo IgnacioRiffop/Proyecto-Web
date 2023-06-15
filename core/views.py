@@ -212,9 +212,16 @@ def producto(request, id):
     if request.method == 'POST':
         formulario = CantidadForm(request.POST, files=request.FILES) # OBTIENE LA DATA DEL FORMULARIO
         if formulario.is_valid():
-            #Carrito.objects.all().delete()
-            carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=formulario.data["cantidad"])
-            #carrito.producto.add(producto)
+            try:
+                CarritoCP = Carrito.objects.get(cliente=cliente,producto=producto)
+                CarritoCP.cantidad = CarritoCP.cantidad + int(formulario.data["cantidad"])
+                if CarritoCP.cantidad > producto.stock:
+                    CarritoCP.cantidad = producto.stock
+                    CarritoCP.save()
+                else:
+                    CarritoCP.save()
+            except Carrito.DoesNotExist:
+                carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=formulario.data["cantidad"])
 
             
     return render(request, ('core/producto.html'), data)

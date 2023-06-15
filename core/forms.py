@@ -27,6 +27,7 @@ class CantidadForm (ModelForm):
         model = Carrito
         fields = ['cantidad']
 
+"""
 class CarritoForm (ModelForm):
     cliente = forms.CharField()
     producto = forms.IntegerField()
@@ -35,6 +36,7 @@ class CarritoForm (ModelForm):
     class Meta:
         model = Carrito
         fields = ['cantidad']
+"""
 
 class envioForm (ModelForm):
     direccion = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Ingrese Dirección"}))
