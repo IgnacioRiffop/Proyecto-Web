@@ -40,7 +40,7 @@ class Carrito(models.Model):
     cantidad = models.IntegerField()
 
     def __str__(self):
-        return self.cliente.usuario
+        return self.cliente.username
     
 class Compras(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
