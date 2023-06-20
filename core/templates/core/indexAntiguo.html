@@ -23,7 +23,6 @@
     {% endif %}
 
     <div>Todas las compras y suscripciones seran destinadas a una fundación sin fines de lucro.</div>
-    <div>USD: {{ monedas.dolar.valor}}</div>
   </div>
 </div>
 <!-- Fin Bienvenido -->
@@ -58,7 +57,7 @@
           <div class="col">
             <div class="card shadow-sm">
               {% if prod.imagen %}
-              <img src="{{ prod.imagen }}" class="responsive" width="100%" height="225">
+              <img src="{{ prod.imagen.url }}" class="responsive" width="100%" height="225">
               {% else %}
               <img src="{% static 'core/img/dog_light_icon.png' %}" class="responsive" width="100%" height="225">
               {% endif %}
@@ -84,10 +83,6 @@
     </div>
     <br>
     {% include 'core/paginator.html' %}
-
-    {% for aux in personajes %}
-      <div>{{aux.name}}</div>
-    {% endfor %}
   </div>
 </div>
 <!-- Fin Tienda-->

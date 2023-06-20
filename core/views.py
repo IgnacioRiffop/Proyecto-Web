@@ -37,6 +37,7 @@ class TipoProductoViewset(viewsets.ModelViewSet):
 ## VIEWS - URLS - HTML
 
 def index(request):
+    """
     productosAll = Producto.objects.all() # SELECT * FROM producto
     page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
     
@@ -50,10 +51,7 @@ def index(request):
         'listado': productosAll,
         'paginator': paginator
     }
-    return render(request, 'core/index.html', data)
-
-
-def indexApi(request):
+    """
     #OBTIENE DATOS DEL API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/') # SELECT * FROM producto
     respuesta2 = requests.get('https://mindicador.cl/api')
@@ -76,6 +74,30 @@ def indexApi(request):
         'listado': productosAll,
         'monedas': monedas,
         'personajes': personajes,
+        'paginator': paginator
+    }
+    return render(request, 'core/index.html', data)
+
+
+def indexApi(request):
+    #OBTIENE DATOS DEL API
+    respuesta = requests.get('http://127.0.0.1:8000/api/productos/') # SELECT * FROM producto
+    respuesta2 = requests.get('https://mindicador.cl/api')
+    #TRANSFORMAR EL JSON
+    productosAll = respuesta.json()
+    monedas = respuesta2.json()
+
+    page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
+    
+    try:
+        paginator = Paginator(productosAll, 3)
+        productosAll = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'listado': productosAll,
+        'monedas': monedas,
         'paginator': paginator
     }
     return render(request, 'core/indexApi.html', data)
