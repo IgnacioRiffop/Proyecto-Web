@@ -144,10 +144,21 @@ def deleteProducto(request, id):
     return redirect(to='adminProductos')
 # FIN CRUD PRODUCTO
 
+def cuenta(request):
+    cliente = User.objects.get(username=request.user.username)
+    comprasCliente = Compras.objects.filter(cliente=cliente)
+    existe = comprasCliente.exists()
+
+    data = {
+        'listado': comprasCliente,
+        'existe': existe
+    }
+    return render(request, 'core/cuenta.html', data)
+
 @grupo_requerido('cliente')
 def carrito(request):
     cliente = User.objects.get(username=request.user.username)
-    CarritoCliente = Carrito.objects.filter(cliente=cliente)
+    CarritoCliente = Carrito.objects.filter(cliente=cliente, vigente=True)
     existe = CarritoCliente.exists()
     respuesta = requests.get('https://mindicador.cl/api/dolar').json()
     valor_usd = respuesta['serie'][0]['valor']
@@ -166,10 +177,11 @@ def carrito(request):
         descuento = 0
 
     #Envio
-    envio = 1000
+    #envio = 1000
 
     #Total
-    total = subtotal-descuento+envio
+    #total = subtotal-descuento+envio
+    total = subtotal-descuento
     total_usd = round(total/valor_usd, 2)
 
     data = {
@@ -178,7 +190,7 @@ def carrito(request):
         'totalusd': total_usd,
         'subtotal': subtotal,
         'descuento': descuento,
-        'envio': envio,
+        #'envio': envio,
         'total': total,
         'existe': existe,
         'form': envioForm()
@@ -189,8 +201,6 @@ def carrito(request):
 def compra(request):
     return render(request, ('core/compra.html'))
 
-def cuenta(request):
-    return render(request, ('core/cuenta.html'))
 
 def tienda(request):
     productosAll = Producto.objects.all() # SELECT * FROM producto

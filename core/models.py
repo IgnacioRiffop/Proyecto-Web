@@ -41,7 +41,7 @@ class Carrito(models.Model):
     vigente = models.BooleanField()
 
     def __str__(self):
-        return self.cliente.username
+        return self.producto.nombre
     
 class TipoEstado(models.Model):
     descripcion = models.CharField(max_length=50)
@@ -55,6 +55,7 @@ class Compras(models.Model):
     direccion = models.CharField(max_length=50)
     contacto = models.CharField(max_length=50)
     fecha = models.DateField()
+    estado = models.ForeignKey(TipoEstado, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.cliente.username
