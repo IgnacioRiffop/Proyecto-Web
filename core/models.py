@@ -38,17 +38,26 @@ class Carrito(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
+    vigente = models.BooleanField()
 
     def __str__(self):
         return self.cliente.username
     
-class Compras(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    direccion = models.CharField(max_length=50)
-    contacto = models.CharField(max_length=50)
+class TipoEstado(models.Model):
+    descripcion = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.cliente.usuario
+        return self.descripcion
+    
+class Compras(models.Model):
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE)
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    direccion = models.CharField(max_length=50)
+    contacto = models.CharField(max_length=50)
+    fecha = models.DateField()
+
+    def __str__(self):
+        return self.cliente.username
     
 class TipoSuscripcion(models.Model):
     nombre = models.CharField(max_length=50)
@@ -62,4 +71,4 @@ class Suscripcion(models.Model):
     suscripcion = models.ForeignKey(TipoSuscripcion, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.cliente.usuario
+        return self.cliente.username

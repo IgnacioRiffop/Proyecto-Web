@@ -247,10 +247,10 @@ def producto(request, id):
                     producto.stock = producto.stock-int(formulario.data["cantidad"])
             except Carrito.DoesNotExist:
                 if int(formulario.data["cantidad"]) > producto.stock:
-                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=producto.stock)
+                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=producto.stock,vigente=True)
                     producto.stock = 0
                 else:
-                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=int(formulario.data["cantidad"]))
+                    carrito = Carrito.objects.create(cliente=cliente,producto=producto,cantidad=int(formulario.data["cantidad"]),vigente=True)
                     producto.stock = producto.stock-int(formulario.data["cantidad"])
     producto.save()
             

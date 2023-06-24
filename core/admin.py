@@ -5,18 +5,18 @@ from .models import *
 
 # DEJA EN MODO TABLA LA VISUALIZACION EN EL ADMIN
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ['nombre','precio','stock','descripcion','tipo','fecha','imagen']
+    list_display = ['nombre','precio','stock','descripcion','tipo','fecha','imagen','vigente']
     search_fields = ['nombre']
     list_per_page = 10
     list_filter = ['tipo']
-    list_editable = ['precio','stock','descripcion','tipo','fecha','imagen']
+    list_editable = ['precio','stock','descripcion','tipo','fecha','imagen','vigente']
 
 class CarritoAdmin(admin.ModelAdmin):
-    list_display = ['cliente','producto','cantidad']
+    list_display = ['cliente','producto','cantidad','vigente']
     #search_fields = ['cliente']
     list_per_page = 10
     list_filter = ['cliente']
-    list_editable = ['producto','cantidad']
+    list_editable = ['producto','cantidad','vigente']
 
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ['usuario','nombre','apellido','email','password']
@@ -38,6 +38,12 @@ class TProductoAdmin(admin.ModelAdmin):
     list_per_page = 10
     #list_filter = ['cliente']
 
+class TEstadoAdmin(admin.ModelAdmin):
+    list_display = ['descripcion']
+    #search_fields = ['cliente']
+    list_per_page = 10
+    #list_filter = ['cliente']
+
 class TSuscripcionAdmin(admin.ModelAdmin):
     list_display = ['nombre','precio']
     #search_fields = ['cliente']
@@ -46,7 +52,7 @@ class TSuscripcionAdmin(admin.ModelAdmin):
     list_editable = ['precio']
 
 class CompraAdmin(admin.ModelAdmin):
-    list_display = ['cliente','direccion','contacto']
+    list_display = ['cliente', 'carrito','direccion','contacto']
     #search_fields = ['cliente']
     list_per_page = 10
     list_filter = ['cliente']
@@ -59,3 +65,4 @@ admin.site.register(Carrito, CarritoAdmin)
 admin.site.register(Compras,CompraAdmin)
 admin.site.register(TipoSuscripcion,TSuscripcionAdmin)
 admin.site.register(Suscripcion,SuscripcionAdmin)
+admin.site.register(TipoEstado,TEstadoAdmin)
