@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static%}
+
+{% block css %}
+  
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+
+<div class="p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal">Administración de Seguimientos</h1>
+</div>
+
+<!-- Tienda -->
+<div class="album py-1 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for compra in listado %}
+        <a href="{% url 'seguimiento' compra.id %}" class="btn btn-verde">Pedido N°{{compra.id}}</a>
+      {% endfor %}
+    </div>
+    <br>
+    {% include 'core/paginator.html' %}
+  </div>
+</div>
+<!-- Fin Tienda-->
+
+
+{% endblock %}
+<!-- FIN CONTENIDO -->
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'core/js/mensajeProducto.js' %}"></script>
+{% endblock %}

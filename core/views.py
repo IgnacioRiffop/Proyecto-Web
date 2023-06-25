@@ -271,6 +271,55 @@ def compra(request,id):
 
     return render(request, 'core/compra.html', data)
 
+@login_required
+@grupo_requerido('administradores')
+def seguimiento(request,id):
+    compra = Compras.objects.get(id=id)
+    totalxproducto = compra.carrito.producto.precio*compra.carrito.cantidad
+    data = {
+        'compra': compra,
+        'total': totalxproducto
+    }
+
+    return render(request, 'core/seguimiento.html', data)
+
+# SEGUIMIENTO
+@login_required
+@grupo_requerido('administradores')
+def estadoValidacion(request, id):
+    compra = Compras.objects.get(id=id)
+    estado = TipoEstado.objects.get(descripcion='Validación')
+    compra.estado = estado
+    compra.save()
+    return redirect(to='adminSeguimiento')
+
+@login_required
+@grupo_requerido('administradores')
+def estadoPreparacion(request, id):
+    compra = Compras.objects.get(id=id)
+    estado = TipoEstado.objects.get(descripcion='Preparación')
+    compra.estado = estado
+    compra.save()
+    return redirect(to='adminSeguimiento')
+
+@login_required
+@grupo_requerido('administradores')
+def estadoReparto(request, id):
+    compra = Compras.objects.get(id=id)
+    estado = TipoEstado.objects.get(descripcion='Reparto')
+    compra.estado = estado
+    compra.save()
+    return redirect(to='adminSeguimiento')
+
+@login_required
+@grupo_requerido('administradores')
+def estadoEntregado(request, id):
+    compra = Compras.objects.get(id=id)
+    estado = TipoEstado.objects.get(descripcion='Entregado')
+    compra.estado = estado
+    compra.save()
+    return redirect(to='adminSeguimiento')
+
 def producto(request, id):
     producto = Producto.objects.get(id=id)
     try:
@@ -476,6 +525,24 @@ def adminProductos(request):
         'paginator': paginator
     }
     return render(request, 'core/adminProductos.html', data)
+
+@login_required
+@grupo_requerido('administradores')
+def adminSeguimiento(request):
+    comprasAll = Compras.objects.all() # SELECT * FROM producto
+    page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
+    
+    try:
+        paginator = Paginator(comprasAll, 9)
+        comprasAll = paginator.page(page)
+    except:
+        raise Http404
+
+    data = {
+        'listado': comprasAll,
+        'paginator': paginator
+    }
+    return render(request, 'core/adminSeguimiento.html', data)
 
 # CRUD CARRITO
 @login_required
