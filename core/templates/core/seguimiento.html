@@ -16,13 +16,11 @@
     <div class="col-sm-3 col-izq ">
       <div class="row perfil">
         <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
-          <h3>Mi Cuenta</h3>
-          <h5>Hola, {{user.username}}</h5>
+          <h3>Seguimiento</h3>
           <div class="list-group my-3">
-            <a href="{% url 'cuenta' %}" class="list-group-item list-group-item-action btn btn-verde" aria-current="true">
-              Mis Compras
+            <a href="{% url 'adminSeguimiento' %}" class="list-group-item list-group-item-action btn btn-verde" aria-current="true">
+              Atrás
             </a>
-            <a href="{% url 'suscripcionAdmin' %}" class="list-group-item list-group-item-action">Mi Suscripción</a>
           </div>
         </div>
       </div>
