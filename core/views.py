@@ -158,6 +158,7 @@ def agregarCompra(request):
             for carrito in carritoCliente:
                 Compras.objects.create(cliente=cliente, carrito=carrito, direccion=formulario.cleaned_data["direccion"], contacto=formulario.cleaned_data["contacto"], fecha = datetime.datetime.now() , estado = estado)
                 carrito.vigente = False
+                carrito.save()
     return redirect(to='/cuenta/')
     #return render(request, 'core/cuenta.html')
 
