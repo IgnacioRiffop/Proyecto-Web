@@ -16,11 +16,13 @@
         <div class="col-sm-5">
             <div class="row perfil">
                 <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
-                    <form action="{% url 'agregarCompra' %}" method="POST" name="formulario">
                         <h5>Hola, Ignacio</h5>
                         <p>Ingresa los datos para completar tu compra.</p>
-                        {% csrf_token %}
-                        {{ form | crispy }}
+                        <form action="{% url 'agregarCompra' %}" method="post" name="formulario" id="formulario">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <input type="submit" style="visibility: hidden;" value="submit">
+                        </form>
                         <br>
                         <h6>Subtotal: ${{subtotal}}</h6>
                         <h6>Descuento: ${{descuento}}</h6>
@@ -29,7 +31,6 @@
                         <h6>Valor dolar: ${{valorusd}} CLP</h6>
                         <h6>Total dolar: ${{totalusd}} USD</h6>
                         <p><div id="btnPaypal"></div></p>
-                    </form>
                 </div>
             </div>
             <div class="col-sm-12">
@@ -110,7 +111,8 @@
                     confirmButtonText: 'Aceptar'
                 }).then(function() {
                     document.formulario.submit();
-                    window.location.href = 'core/cuenta.html';
+                    //document.getElementById("formulario").submit();
+                    //window.location.href = '/agregarCompra/';
                 });
             });
         },
