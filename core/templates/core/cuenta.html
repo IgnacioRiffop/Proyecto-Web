@@ -16,7 +16,7 @@
       <div class="row perfil">
         <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
           <h3>Mi Cuenta</h3>
-          <h5>Hola, Ignacio</h5>
+          <h5>Hola, {{user.username}}</h5>
           <div class="list-group my-3">
             <a href="{% url 'cuenta' %}" class="list-group-item list-group-item-action btn btn-verde"
               aria-current="true">
@@ -49,7 +49,7 @@
                   <h5 class="card-title">Pedido N°{{compra.id}}</h5>
                   <p class="card-text">Estado: {{compra.estado}}</p>
                   <p class="card-text"><small class="text-body-secondary">Fecha: {{compra.fecha}}</small></p>
-                  <a href="{% url 'compra' %}" class="btn btn-verde btn-sm">Ver Más</a>
+                  <a href="{% url 'compra' compra.id %}" class="btn btn-verde">Ver Más</a>
                 </div>
               </div>
             </div>

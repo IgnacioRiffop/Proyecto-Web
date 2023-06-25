@@ -17,7 +17,7 @@
       <div class="row perfil">
         <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
           <h3>Mi Cuenta</h3>
-          <h5>Hola, Ignacio</h5>
+          <h5>Hola, {{user.username}}</h5>
           <div class="list-group my-3">
             <a href="{% url 'cuenta' %}" class="list-group-item list-group-item-action btn btn-verde" aria-current="true">
               Mis Compras
@@ -34,69 +34,112 @@
 
     <!-- Lateral der -->
     <div class="col-sm-9">
-      <h5 class="">Pedido N°102</h5>
+      <h5 class="">Pedido N°{{compra.id}}</h5>
       <div class="card mb-3 my-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="{% static 'core/img/collarblanco.jpg' %}" class="img-fluid rounded-start" alt="...">
+            <img src="{{ compra.carrito.producto.imagen.url }}" class="img-fluid rounded-start" alt="...">
           </div>
           <div class="col-md-8">
             <div class="card-body">
-              <p class="card-text">Collar Martingale WhiteOwl Perro</p>
-              <p class="card-text fw-bold">$30.250</p>
-              <p class="card-text"><small class="text-body-secondary">Fecha: 11/03/2023</small></p>
-              <p class="card-text"><small class="text-body-secondary">Cantidad: 1</small></p>
+              <p class="card-text">{{ compra.carrito.producto.nombre }}</p>
+              <p class="card-text fw-bold">${{ compra.carrito.producto.precio }}</p>
+              <p class="card-text"><small class="text-body-secondary">Fecha: {{ compra.fecha }}</small></p>
+              <p class="card-text"><small class="text-body-secondary">Cantidad: {{ compra.carrito.cantidad }}</small></p>
             </div>
           </div>
         </div>
       </div>
-      <h5 class="">Envio a domicilio:</h5>
-      <p class="fs-6">Avenida Las Nieves Oriente, 2196, Puente Alto. Metropolitana De Santiago.</p>
+      <h5 class="">Direccion:</h5>
+      <p class="fs-6">{{ compra.direccion }}</p>
+      <h5 class="">Seguimiento:</h5>
       <div class="row">
+
         <div class="col-3">
           <div class="card mb-4 rounded-3 shadow-sm border-success">
             <div class="card-header py-3 border-success bg-success">
-              <h4 class="my-0 fw-normal fs-6 text-white">Solicitud Recibida</h4>
+              <h4 class="my-0 fw-normal fs-6 text-white">Validación</h4>
             </div>
             <div class="card-body">
-              <p>Hemos recibido tu solicitud de compra</p>
-              <p>09/04/2023 09:08:47 </p>
+              <p>Tu compra esta siendo validada.</p>
             </div>
           </div>
         </div>
+
+        {% if compra.estado.descripcion == 'Preparación' or compra.estado.descripcion == 'Reparto' or compra.estado.descripcion == 'Entregado' %} 
         <div class="col-3">
           <div class="card mb-4 rounded-3 shadow-sm border-success">
             <div class="card-header py-3 border-success bg-success">
-              <h4 class="my-0 fw-normal fs-6 text-white">En Preparación</h4>
+              <h4 class="my-0 fw-normal fs-6 text-white">Preparación</h4>
             </div>
             <div class="card-body">
-              <p>Tu compra ha sido confirmada</p>
-              <p>09/04/2023 09:15:50 </p>
+              <p>Tu compra esta siendo preparada.</p>
             </div>
           </div>
         </div>
+        {% else %}
         <div class="col-3">
-          <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3 ">
-              <h4 class="my-0 fw-normal fs-6">En Camino</h4>
+          <div class="card mb-4 rounded-3 shadow-sm ">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal fs-6">Preparación</h4>
             </div>
             <div class="card-body">
-              <p>Tu pedido va en camino a su destino</p>
+              <p>Tu compra esta siendo preparada.</p>
               <p></p>
             </div>
           </div>
         </div>
+        {% endif %}
+
+        {% if compra.estado.descripcion == 'Reparto' or compra.estado.descripcion == 'Entregado' %} 
+        <div class="col-3">
+          <div class="card mb-4 rounded-3 shadow-sm border-success">
+            <div class="card-header py-3 border-success bg-success">
+              <h4 class="my-0 fw-normal fs-6 text-white">Reparto</h4>
+            </div>
+            <div class="card-body">
+              <p>Tu compra esta siendo repartida.</p>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="col-3">
+          <div class="card mb-4 rounded-3 shadow-sm ">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal fs-6">Reparto</h4>
+            </div>
+            <div class="card-body">
+              <p>Tu compra esta siendo repartida.</p>
+              <p></p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if compra.estado.descripcion == 'Entregado' %} 
+        <div class="col-3">
+          <div class="card mb-4 rounded-3 shadow-sm border-success">
+            <div class="card-header py-3 border-success bg-success">
+              <h4 class="my-0 fw-normal fs-6 text-white">Entregado</h4>
+            </div>
+            <div class="card-body">
+              <p>Tu compra fue entregada.</p>
+            </div>
+          </div>
+        </div>
+        {% else %}
         <div class="col-3">
           <div class="card mb-4 rounded-3 shadow-sm ">
             <div class="card-header py-3">
               <h4 class="my-0 fw-normal fs-6">Entregado</h4>
             </div>
             <div class="card-body">
-              <p>Tu compra fue entregada</p>
+              <p>Tu compra fue entregada.</p>
               <p></p>
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
 
       <!-- Fin Lateral der -->

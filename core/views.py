@@ -198,9 +198,6 @@ def carrito(request):
 
     return render(request, 'core/carrito.html', data)
 
-def compra(request):
-    return render(request, ('core/compra.html'))
-
 
 def tienda(request):
     productosAll = Producto.objects.all() # SELECT * FROM producto
@@ -228,6 +225,16 @@ def login(request):
 
 def registro(request):
     return render(request, ('core/registro.html'))
+
+def compra(request,id):
+    compra = Compras.objects.get(id=id)
+    totalxproducto = compra.carrito.producto.precio*compra.carrito.cantidad
+    data = {
+        'compra': compra,
+        'total': totalxproducto
+    }
+
+    return render(request, 'core/compra.html', data)
 
 def producto(request, id):
     producto = Producto.objects.get(id=id)
