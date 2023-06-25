@@ -18,6 +18,15 @@ class ProductoForm (ModelForm):
                 'fecha' : forms.SelectDateWidget(years=range(1940,2023))
         }
 
+"""
+class RegistroForm (ModelForm):
+    nombreusuario = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Ingrese Nombre de usuario"}))
+    contrasena = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Ingrese Contraseña"}))
+    contrasenarep = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Repita Contraseña"}))
+    class Meta:
+        model = User
+        fields = ['cantidad']
+"""
 
 class CantidadForm (ModelForm):
     cantidad = forms.IntegerField(min_value=1 ,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Cantidad"}))

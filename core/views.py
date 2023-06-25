@@ -34,6 +34,14 @@ class TipoProductoViewset(viewsets.ModelViewSet):
     queryset = TipoProducto.objects.all()
     serializer_class = TipoProductoSerializer
 
+class TipoSuscripcionViewset(viewsets.ModelViewSet):
+    queryset = TipoSuscripcion.objects.all()
+    serializer_class = TipoSuscripcionSerializer
+
+class SuscripcionViewset(viewsets.ModelViewSet):
+    queryset = Suscripcion.objects.all()
+    serializer_class = SuscripcionSerializer
+
 ## VIEWS - URLS - HTML
 
 def index(request):

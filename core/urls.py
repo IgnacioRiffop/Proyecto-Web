@@ -6,6 +6,8 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('productos', ProductoViewset)
 router.register('tipoproductos', TipoProductoViewset)
+router.register('tiposuscripcion', TipoSuscripcionViewset)
+router.register('suscripcion', SuscripcionViewset)
 
 ## SE VAN A CREAR TODAS LAS URLS
 urlpatterns = [
