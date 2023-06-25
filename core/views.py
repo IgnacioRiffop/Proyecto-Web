@@ -7,8 +7,9 @@ import datetime
 from .serializers import *
 from rest_framework import viewsets
 import requests
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import authenticate, login
 # Create your views here.
 
 #FUNCION GENERICA QUE VALIDA EL GRUPO DEL USUARIO
@@ -212,12 +213,28 @@ def tienda(request):
 def tiendaSesion(request):
     return render(request, ('core/tiendaSesion.html'))
 """
-
+"""
 def login(request):
     return render(request, ('core/login.html'))
-
+"""
 def registro(request):
-    return render(request, ('core/registro.html'))
+    data = {
+        'form': RegistroForm()
+    }
+
+    if request.method == 'POST':
+        formulario = RegistroForm(data=request.POST) # OBTIENE LA DATA DEL FORMULARIO
+        if formulario.is_valid():
+            formulario.save()
+            user = authenticate(username = formulario.cleaned_data["username"], password = formulario.cleaned_data["password1"])
+            login(request, user)
+            #messages.success(request, "Te has registrado correctamente!")
+            grupo = Group.objects.get(name='cliente')
+            user.groups.add(grupo)
+            #redirigir al home
+            return redirect(to="index")
+        data["form"]=formulario
+    return render(request, 'core/registro.html', data)
 
 @grupo_requerido('cliente')
 def compra(request,id):
