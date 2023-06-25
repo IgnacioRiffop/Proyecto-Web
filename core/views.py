@@ -45,21 +45,6 @@ class SuscripcionViewset(viewsets.ModelViewSet):
 ## VIEWS - URLS - HTML
 
 def index(request):
-    """
-    productosAll = Producto.objects.all() # SELECT * FROM producto
-    page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
-    
-    try:
-        paginator = Paginator(productosAll, 3)
-        productosAll = paginator.page(page)
-    except:
-        raise Http404
-
-    data = {
-        'listado': productosAll,
-        'paginator': paginator
-    }
-    """
     #OBTIENE DATOS DEL API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/') # SELECT * FROM producto
     respuesta2 = requests.get('https://mindicador.cl/api')
@@ -67,8 +52,8 @@ def index(request):
     #TRANSFORMAR EL JSON
     productosAll = respuesta.json()
     monedas = respuesta2.json()
-    envolvente = respuesta3.json()
-    personajes = envolvente['results']
+    #envolvente = respuesta3.json()
+    #personajes = envolvente['results']
 
     page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
     
@@ -81,7 +66,7 @@ def index(request):
     data = {
         'listado': productosAll,
         'monedas': monedas,
-        'personajes': personajes,
+        #'personajes': personajes,
         'paginator': paginator
     }
     return render(request, 'core/index.html', data)
@@ -234,6 +219,7 @@ def login(request):
 def registro(request):
     return render(request, ('core/registro.html'))
 
+@grupo_requerido('cliente')
 def compra(request,id):
     compra = Compras.objects.get(id=id)
     totalxproducto = compra.carrito.producto.precio*compra.carrito.cantidad
@@ -285,7 +271,7 @@ def producto(request, id):
 def productoSesion(request):
     return render(request, ('core/productoSesion.html'))
 """
-
+@grupo_requerido('cliente')
 def suscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
     intermedia = TipoSuscripcion.objects.get(id=2)
@@ -307,6 +293,7 @@ def suscripcion(request):
     }
     return render(request, 'core/suscripcion.html', data)
 
+@grupo_requerido('cliente')
 def suscripcionAdmin(request):
     basica = TipoSuscripcion.objects.get(id=1)
     intermedia = TipoSuscripcion.objects.get(id=2)
@@ -327,6 +314,7 @@ def suscripcionAdmin(request):
     }
     return render(request, 'core/suscripcionAdmin.html', data)
 
+@grupo_requerido('cliente')
 def miSuscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
     intermedia = TipoSuscripcion.objects.get(id=2)
@@ -419,6 +407,7 @@ def base(request):
 def administracion(request):
     return render(request, ('core/administracion.html'))
 
+@grupo_requerido('administradores')
 def adminProductos(request):
     productosAll = Producto.objects.all() # SELECT * FROM producto
     page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
