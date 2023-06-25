@@ -138,6 +138,18 @@ def deleteProducto(request, id):
     return redirect(to='adminProductos')
 # FIN CRUD PRODUCTO
 
+def agregarCompra(request):
+    cliente = User.objects.get(username=request.user.username)
+    carritoCliente = Carrito.objects.filter(cliente=cliente, vigente=True)
+
+    if request.method == 'POST':
+        formulario = envioForm(request.POST) # OBTIENE LA DATA DEL FORMULARIO
+        if formulario.is_valid():
+            formulario.save()
+            for carrito in carritoCliente:
+                Compras.objects.create(cliente=cliente, carrito=carrito, direccion=formulario.cleaned_data["direccion"], contacto=formulario.cleaned_data["contacto"], fecha = datetime.now(), estado = "Validación")
+    return redirect(to='cuenta')
+
 def cuenta(request):
     cliente = User.objects.get(username=request.user.username)
     comprasCliente = Compras.objects.filter(cliente=cliente)

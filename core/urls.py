@@ -21,6 +21,7 @@ urlpatterns = [
     path('updateProducto/<id>/', updateProducto, name="updateProducto"),
     path('deleteProducto/<id>/', deleteProducto, name="deleteProducto"),
     path('deleteCarrito/<id>/', deleteCarrito, name="deleteCarrito"),
+    path('agregarCompra/', agregarCompra, name="agregarCompra"),
     #path('tiendaSesion', tiendaSesion, name="tiendaSesion"),
     #path('productoSesion', productoSesion, name="productoSesion"),
     path('carrito/', carrito, name="carrito"),
