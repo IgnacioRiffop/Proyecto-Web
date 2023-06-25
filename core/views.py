@@ -102,6 +102,8 @@ def indexSesion(request):
 """
 
 # CRUD PRODUCTO
+@login_required
+@grupo_requerido('vendedor')
 def addProducto(request):
     data = {
         'form' : ProductoForm()
@@ -116,6 +118,8 @@ def addProducto(request):
 
     return render(request, 'core/addProducto.html', data)
 
+@login_required
+@grupo_requerido('vendedor')
 def updateProducto(request, id):
     producto = Producto.objects.get(id=id) #OBTIENE UN PRODUCTO POR EL ID
     data = {
@@ -132,12 +136,16 @@ def updateProducto(request, id):
             
     return render(request, 'core/updateProducto.html', data)
 
+@login_required
+@grupo_requerido('vendedor')
 def deleteProducto(request, id):
     producto = Producto.objects.get(id=id)
     producto.delete()
     return redirect(to='adminProductos')
 # FIN CRUD PRODUCTO
 
+@login_required
+@grupo_requerido('cliente')
 def agregarCompra(request):
     cliente = User.objects.get(username=request.user.username)
     carritoCliente = Carrito.objects.filter(cliente=cliente, vigente=True)
@@ -150,6 +158,8 @@ def agregarCompra(request):
                 Compras.objects.create(cliente=cliente, carrito=carrito, direccion=formulario.cleaned_data["direccion"], contacto=formulario.cleaned_data["contacto"], fecha = datetime.now(), estado = "Validación")
     return redirect(to='cuenta')
 
+@login_required
+@grupo_requerido('cliente')
 def cuenta(request):
     cliente = User.objects.get(username=request.user.username)
     comprasCliente = Compras.objects.filter(cliente=cliente)
@@ -161,6 +171,7 @@ def cuenta(request):
     }
     return render(request, 'core/cuenta.html', data)
 
+@login_required
 @grupo_requerido('cliente')
 def carrito(request):
     cliente = User.objects.get(username=request.user.username)
@@ -248,6 +259,7 @@ def registro(request):
         data["form"]=formulario
     return render(request, 'core/registro.html', data)
 
+@login_required
 @grupo_requerido('cliente')
 def compra(request,id):
     compra = Compras.objects.get(id=id)
@@ -300,6 +312,7 @@ def producto(request, id):
 def productoSesion(request):
     return render(request, ('core/productoSesion.html'))
 """
+@login_required
 @grupo_requerido('cliente')
 def suscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
@@ -322,6 +335,7 @@ def suscripcion(request):
     }
     return render(request, 'core/suscripcion.html', data)
 
+@login_required
 @grupo_requerido('cliente')
 def suscripcionAdmin(request):
     basica = TipoSuscripcion.objects.get(id=1)
@@ -343,6 +357,7 @@ def suscripcionAdmin(request):
     }
     return render(request, 'core/suscripcionAdmin.html', data)
 
+@login_required
 @grupo_requerido('cliente')
 def miSuscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
@@ -365,18 +380,24 @@ def miSuscripcion(request):
     return render(request, 'core/miSuscripcion.html', data)
 
 # CRUD Suscripcion
+@login_required
+@grupo_requerido('cliente')
 def addSuscripcion(request, id):
     cliente = User.objects.get(username=request.user.username)
     tipoSuscripcion = TipoSuscripcion.objects.get(id=id)
     suscripcion = Suscripcion.objects.create(cliente=cliente, suscripcion=tipoSuscripcion)
     return redirect(to='suscripcion')
 
+@login_required
+@grupo_requerido('cliente')
 def deleteSuscripcion(request, id):
     cliente = User.objects.get(username=request.user.username)
     suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
     suscripcionCliente.delete()
     return redirect(to='suscripcion')
 
+@login_required
+@grupo_requerido('cliente')
 def updateSuscripcion(request, id):
     cliente = User.objects.get(username=request.user.username)
     tipoSuscripcion = TipoSuscripcion.objects.get(id=id)
@@ -433,10 +454,13 @@ def recuperarPass(request):
 def base(request):
     return render(request, ('core/base.html'))
 
+@login_required
+@grupo_requerido('vendedor')
 def administracion(request):
     return render(request, ('core/administracion.html'))
 
-@grupo_requerido('administradores')
+@login_required
+@grupo_requerido('vendedor')
 def adminProductos(request):
     productosAll = Producto.objects.all() # SELECT * FROM producto
     page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
@@ -454,6 +478,8 @@ def adminProductos(request):
     return render(request, 'core/adminProductos.html', data)
 
 # CRUD CARRITO
+@login_required
+@grupo_requerido('cliente')
 def deleteCarrito(request, id):
     itemCarrito = Carrito.objects.get(id=id)
     producto = Producto.objects.get(nombre=itemCarrito.producto.nombre)
