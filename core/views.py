@@ -328,7 +328,7 @@ def producto(request, id):
     producto = Producto.objects.get(id=id)
     try:
         cliente = User.objects.get(username=request.user.username)
-    except Cliente.DoesNotExist:
+    except User.DoesNotExist:
         cliente = None
     data = {
         'producto': producto,
@@ -369,6 +369,11 @@ def productoSesion(request):
 @grupo_requerido('cliente')
 def suscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
+
+    respuesta = requests.get('https://mindicador.cl/api/dolar').json()
+    valor_usd = respuesta['serie'][0]['valor']
+    total_usd = round(basica.precio/valor_usd, 2)
+
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
     
@@ -383,7 +388,8 @@ def suscripcion(request):
         'basica': basica,
         'intermedia': intermedia,
         'alta' : alta,
-        'suscripcionCliente' : suscripcionCliente
+        'suscripcionCliente' : suscripcionCliente,
+        'totalusd' : total_usd
 
     }
     return render(request, 'core/suscripcion.html', data)
