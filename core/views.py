@@ -575,7 +575,7 @@ def adminProductos(request):
 @login_required
 @grupo_requerido('administradores')
 def adminSeguimiento(request):
-    comprasAll = Compras.objects.all() # SELECT * FROM producto
+    comprasAll = Compras.objects.all().order_by('-id') # SELECT * FROM producto
     page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
     
     try:
