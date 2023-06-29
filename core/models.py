@@ -61,7 +61,7 @@ class Compras(models.Model):
     estado = models.ForeignKey(TipoEstado, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.cliente.username
+        return self.codigo
     
 class Boleta(models.Model):
     codigo = models.CharField(max_length=20)

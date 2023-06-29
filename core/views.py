@@ -73,34 +73,6 @@ def index(request):
     }
     return render(request, 'core/index.html', data)
 
-"""
-def indexApi(request):
-    #OBTIENE DATOS DEL API
-    respuesta = requests.get('http://127.0.0.1:8000/api/productos/') # SELECT * FROM producto
-    respuesta2 = requests.get('https://mindicador.cl/api')
-    #TRANSFORMAR EL JSON
-    productosAll = respuesta.json()
-    monedas = respuesta2.json()
-
-    page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
-    
-    try:
-        paginator = Paginator(productosAll, 3)
-        productosAll = paginator.page(page)
-    except:
-        raise Http404
-
-    data = {
-        'listado': productosAll,
-        'monedas': monedas,
-        'paginator': paginator
-    }
-    return render(request, 'core/indexApi.html', data)
-"""
-"""
-def indexSesion(request):
-    return render(request, ('core/indexSesion.html'))
-"""
 
 # CRUD PRODUCTO
 @login_required
@@ -190,9 +162,18 @@ def cuenta(request):
     comprasCliente = Compras.objects.filter(cliente=cliente).order_by('-id')
     existe = comprasCliente.exists()
 
+    page = request.GET.get('page', 1) # OBTENEMOS LA VARIABLE DE LA URL, SI NO EXISTE NADA DEVUELVE 1
+    
+    try:
+        paginator = Paginator(comprasCliente, 3)
+        comprasCliente = paginator.page(page)
+    except:
+        raise Http404
+
     data = {
         'listado': comprasCliente,
-        'existe': existe
+        'existe': existe,
+        'paginator': paginator
     }
     return render(request, 'core/cuenta.html', data)
 

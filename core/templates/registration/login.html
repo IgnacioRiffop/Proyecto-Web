@@ -19,13 +19,6 @@
             {% csrf_token %}
             {{form | crispy}}
             <div class="d-flex justify-content-around mt-1">
-                <!--
-                <div class="pt-1">
-
-                    <a href="{% url 'recuperarPass' %}"
-                        class="text-decoration-none fw-semibold fst-italic ltr-verde">Olvidaste
-                        tu contraseña?</a>
-                </div>-->
             </div>
             <input type="submit" value="Iniciar Sesión" class="btn btn-verde my-1 w-100 mt-3 fw-semibold shadow-sm">
         </form>
