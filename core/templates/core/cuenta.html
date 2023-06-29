@@ -46,7 +46,8 @@
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">Pedido N°{{compra.id}}</h5>
+                  <h5 class="card-title">{{compra.carrito.producto.nombre}}</h5>
+                  <p class="card-text">Compra: {{compra.codigo}}</p>
                   <p class="card-text">Estado: {{compra.estado}}</p>
                   <p class="card-text"><small class="text-body-secondary">Fecha: {{compra.fecha}}</small></p>
                   <a href="{% url 'compra' compra.id %}" class="btn btn-verde">Ver Más</a>

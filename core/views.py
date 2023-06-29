@@ -10,6 +10,7 @@ import requests
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login
+import uuid
 # Create your views here.
 
 #FUNCION GENERICA QUE VALIDA EL GRUPO DEL USUARIO
@@ -72,7 +73,7 @@ def index(request):
     }
     return render(request, 'core/index.html', data)
 
-
+"""
 def indexApi(request):
     #OBTIENE DATOS DEL API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/') # SELECT * FROM producto
@@ -95,7 +96,7 @@ def indexApi(request):
         'paginator': paginator
     }
     return render(request, 'core/indexApi.html', data)
-
+"""
 """
 def indexSesion(request):
     return render(request, ('core/indexSesion.html'))
@@ -144,6 +145,12 @@ def deleteProducto(request, id):
     return redirect(to='adminProductos')
 # FIN CRUD PRODUCTO
 
+def generar_id_random():
+    id_random = str(uuid.uuid4())[:5]
+    while Compras.objects.filter(codigo=id_random).exists():
+        id_random = str(uuid.uuid4())[:5]
+    return id_random
+
 @login_required
 @grupo_requerido('cliente')
 def agregarCompra(request):
@@ -151,14 +158,28 @@ def agregarCompra(request):
     carritoCliente = Carrito.objects.filter(cliente=cliente, vigente=True)
     estado = TipoEstado.objects.get(descripcion='Validación')
 
+    subtotal = sum(carrito.producto.precio*carrito.cantidad for carrito in carritoCliente)
+    # Descuento Suscripcion
+    try:
+        suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
+    except Suscripcion.DoesNotExist:
+        suscripcionCliente = None
+    if suscripcionCliente != None:
+        descuento = round(subtotal*0.05)
+    else:
+        descuento = 0
+    total = subtotal-descuento
+
     if request.method == 'POST':
         formulario = envioForm(request.POST) # OBTIENE LA DATA DEL FORMULARIO
         if formulario.is_valid():
             #formulario.save()
+            codigo = generar_id_random()
             for carrito in carritoCliente:
-                Compras.objects.create(cliente=cliente, carrito=carrito, direccion=formulario.cleaned_data["direccion"], contacto=formulario.cleaned_data["contacto"], fecha = datetime.datetime.now() , estado = estado)
+                Compras.objects.create(codigo=codigo,cliente=cliente, carrito=carrito, direccion=formulario.cleaned_data["direccion"], contacto=formulario.cleaned_data["contacto"], fecha = datetime.datetime.now() , estado = estado)
                 carrito.vigente = False
                 carrito.save()
+            Boleta.objects.create(codigo=codigo,subtotal=subtotal,descuento=descuento,total=total)
     return redirect(to='/cuenta/')
     #return render(request, 'core/cuenta.html')
 
@@ -166,7 +187,7 @@ def agregarCompra(request):
 @grupo_requerido('cliente')
 def cuenta(request):
     cliente = User.objects.get(username=request.user.username)
-    comprasCliente = Compras.objects.filter(cliente=cliente)
+    comprasCliente = Compras.objects.filter(cliente=cliente).order_by('-id')
     existe = comprasCliente.exists()
 
     data = {
@@ -268,7 +289,9 @@ def registro(request):
 def compra(request,id):
     compra = Compras.objects.get(id=id)
     totalxproducto = compra.carrito.producto.precio*compra.carrito.cantidad
+    boleta = Boleta.objects.get(codigo=compra.codigo)
     data = {
+        'boleta': boleta,
         'compra': compra,
         'total': totalxproducto
     }
@@ -466,6 +489,7 @@ def updateSuscripcion(request, id):
     return redirect(to='suscripcion')
 # FIN CRUD Suscripcion
 
+"""
 def voucher(request):
     cliente = Cliente.objects.filter(usuario=request.user.username)[:1]
     CarritoCliente = Carrito.objects.filter(cliente=cliente)
@@ -506,7 +530,7 @@ def voucher(request):
 
     CarritoCliente.delete()
     return render(request, 'core/voucher.html', data)
-
+"""
 def recuperarPass(request):
     return render(request, ('core/recuperarPass.html'))
 

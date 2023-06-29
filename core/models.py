@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 
@@ -49,7 +50,9 @@ class TipoEstado(models.Model):
     def __str__(self):
         return self.descripcion
     
+
 class Compras(models.Model):
+    codigo = models.CharField(max_length=20)
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
     direccion = models.CharField(max_length=50)
@@ -59,6 +62,14 @@ class Compras(models.Model):
 
     def __str__(self):
         return self.cliente.username
+    
+class Boleta(models.Model):
+    codigo = models.CharField(max_length=20)
+    subtotal = models.IntegerField()
+    descuento = models.IntegerField()
+    total = models.IntegerField()
+    def __str__(self):
+        return self.codigo
     
 class TipoSuscripcion(models.Model):
     nombre = models.CharField(max_length=50)

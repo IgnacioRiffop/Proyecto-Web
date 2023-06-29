@@ -51,8 +51,15 @@ class TSuscripcionAdmin(admin.ModelAdmin):
     #list_filter = ['cliente']
     list_editable = ['precio']
 
+class BoletaAdmin(admin.ModelAdmin):
+    list_display = ['codigo','subtotal','descuento','total']
+    #search_fields = ['cliente']
+    list_per_page = 10
+    #list_filter = ['cliente']
+    list_editable = ['subtotal','descuento','total']
+
 class CompraAdmin(admin.ModelAdmin):
-    list_display = ['cliente', 'carrito','direccion','contacto','fecha','estado']
+    list_display = ['codigo','cliente', 'carrito','direccion','contacto','fecha','estado']
     #search_fields = ['cliente']
     list_per_page = 10
     list_filter = ['cliente']
@@ -66,3 +73,4 @@ admin.site.register(Compras,CompraAdmin)
 admin.site.register(TipoSuscripcion,TSuscripcionAdmin)
 admin.site.register(Suscripcion,SuscripcionAdmin)
 admin.site.register(TipoEstado,TEstadoAdmin)
+admin.site.register(Boleta,BoletaAdmin)
