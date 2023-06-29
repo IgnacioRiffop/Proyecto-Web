@@ -363,7 +363,7 @@ def producto(request, id):
         formulario = CantidadForm(request.POST, files=request.FILES) # OBTIENE LA DATA DEL FORMULARIO
         if formulario.is_valid():
             try:
-                CarritoCP = Carrito.objects.get(cliente=cliente,producto=producto)
+                CarritoCP = Carrito.objects.get(cliente=cliente,producto=producto,vigente=True)
                 cantidadstock = CarritoCP.cantidad+producto.stock
                 CarritoCP.cantidad = CarritoCP.cantidad + int(formulario.data["cantidad"])
                 if CarritoCP.cantidad > cantidadstock:

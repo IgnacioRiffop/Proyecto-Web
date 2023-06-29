@@ -42,7 +42,7 @@ class Carrito(models.Model):
     vigente = models.BooleanField()
 
     def __str__(self):
-        return self.producto.nombre
+        return self.codigo
     
 class TipoEstado(models.Model):
     descripcion = models.CharField(max_length=50)
