@@ -78,10 +78,13 @@ def index(request):
     except User.DoesNotExist:
         cliente = None
 
+    flag = usuario_pertenece_a_grupo(request.user.username, 'administradores')
+
     data = {
         'listado': productosAll,
         'monedas': monedas,
         #'personajes': personajes,
+        'isadmin': flag,
         'paginator': paginator
     }
     return render(request, 'core/index.html', data)
@@ -546,8 +549,20 @@ def voucher(request):
 def recuperarPass(request):
     return render(request, ('core/recuperarPass.html'))
 """
+def usuario_pertenece_a_grupo(username, group_name):
+    try:
+        usuario = User.objects.get(username=username)
+        grupo = Group.objects.get(name=group_name)
+        if usuario.groups.filter(name=group_name).exists():
+            return True
+        else:
+            return False
+    except (User.DoesNotExist, Group.DoesNotExist):
+        # Manejar el caso en el que el usuario o el grupo no existan
+        return False
+    
 def base(request):
-    return render(request, ('core/base.html'))
+    return render(request, 'core/base.html')
 
 @login_required
 @grupo_requerido('vendedor')
