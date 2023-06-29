@@ -4,6 +4,7 @@ from .forms import *
 from django.contrib import messages
 from django.core.paginator import Paginator
 import datetime
+from datetime import date
 from .serializers import *
 from rest_framework import viewsets
 import requests
@@ -11,6 +12,7 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import authenticate, login
 import uuid
+from dateutil.relativedelta import relativedelta
 # Create your views here.
 
 #FUNCION GENERICA QUE VALIDA EL GRUPO DEL USUARIO
@@ -64,6 +66,17 @@ def index(request):
         productosAll = paginator.page(page)
     except:
         raise Http404
+    
+    try:
+        cliente = User.objects.get(username=request.user.username)
+        try:
+            suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
+            if suscripcionCliente.fecha < datetime.datetime.now().date():
+                suscripcionCliente.delete()
+        except Suscripcion.DoesNotExist:
+            suscripcionCliente = None
+    except User.DoesNotExist:
+        cliente = None
 
     data = {
         'listado': productosAll,
@@ -190,10 +203,16 @@ def carrito(request):
     subtotal = sum(carrito.producto.precio*carrito.cantidad for carrito in CarritoCliente)
 
     # Descuento Suscripcion
+
     try:
         suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
+        if suscripcionCliente.fecha < datetime.datetime.now().date():
+            suscripcionCliente.delete()
     except Suscripcion.DoesNotExist:
         suscripcionCliente = None
+
+
+
     if suscripcionCliente != None:
         descuento = round(subtotal*0.05)
     else:
@@ -381,11 +400,16 @@ def suscripcion(request):
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
     
-    cliente = User.objects.filter(username=request.user.username)[:1]
     try:
-        suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
-    except Suscripcion.DoesNotExist:
-        suscripcionCliente = None
+        cliente = User.objects.get(username=request.user.username)
+        try:
+            suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
+            if suscripcionCliente.fecha < datetime.datetime.now().date():
+                suscripcionCliente.delete()
+        except Suscripcion.DoesNotExist:
+            suscripcionCliente = None
+    except User.DoesNotExist:
+        cliente = None
 
 
     data = {
@@ -426,12 +450,17 @@ def miSuscripcion(request):
     basica = TipoSuscripcion.objects.get(id=1)
     intermedia = TipoSuscripcion.objects.get(id=2)
     alta = TipoSuscripcion.objects.get(id=3)
-    
-    cliente = User.objects.filter(username=request.user.username)[:1]
+
     try:
-        suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
-    except Suscripcion.DoesNotExist:
-        suscripcionCliente = None
+        cliente = User.objects.get(username=request.user.username)
+        try:
+            suscripcionCliente = Suscripcion.objects.get(cliente=cliente)
+            if suscripcionCliente.fecha < datetime.datetime.now().date():
+                suscripcionCliente.delete()
+        except Suscripcion.DoesNotExist:
+            suscripcionCliente = None
+    except User.DoesNotExist:
+        cliente = None
 
     data = {
         'basica': basica,
@@ -448,7 +477,8 @@ def miSuscripcion(request):
 def addSuscripcion(request, id):
     cliente = User.objects.get(username=request.user.username)
     tipoSuscripcion = TipoSuscripcion.objects.get(id=id)
-    suscripcion = Suscripcion.objects.create(cliente=cliente, suscripcion=tipoSuscripcion)
+    un_mes_dsp = datetime.datetime.now()   + relativedelta(months=1)
+    suscripcion = Suscripcion.objects.create(cliente=cliente, suscripcion=tipoSuscripcion, fecha=un_mes_dsp)
     return redirect(to='suscripcion')
 
 @login_required

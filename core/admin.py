@@ -26,11 +26,11 @@ class ClienteAdmin(admin.ModelAdmin):
     list_editable = ['nombre','apellido','email','password']
 
 class SuscripcionAdmin(admin.ModelAdmin):
-    list_display = ['cliente','suscripcion']
+    list_display = ['cliente','suscripcion','fecha']
     #search_fields = ['cliente']
     list_per_page = 10
     list_filter = ['cliente']
-    list_editable = ['suscripcion']
+    list_editable = ['suscripcion','fecha']
 
 class TProductoAdmin(admin.ModelAdmin):
     list_display = ['descripcion']

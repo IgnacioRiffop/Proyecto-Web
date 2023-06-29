@@ -81,6 +81,7 @@ class TipoSuscripcion(models.Model):
 class Suscripcion(models.Model):
     cliente = models.ForeignKey(User, on_delete=models.CASCADE)
     suscripcion = models.ForeignKey(TipoSuscripcion, on_delete=models.CASCADE)
+    fecha = models.DateField()
 
     def __str__(self):
         return self.cliente.username
