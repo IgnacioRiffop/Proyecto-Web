@@ -531,9 +531,10 @@ def voucher(request):
     CarritoCliente.delete()
     return render(request, 'core/voucher.html', data)
 """
+"""
 def recuperarPass(request):
     return render(request, ('core/recuperarPass.html'))
-
+"""
 def base(request):
     return render(request, ('core/base.html'))
 
