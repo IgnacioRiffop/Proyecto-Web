@@ -18,12 +18,12 @@
       <div class="row perfil">
         <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
           <h3>Mi Cuenta</h3>
-          <h5>Hola, Ignacio</h5>
+          <h5>Hola, {{user.username}}</h5>
           <div class="list-group my-3">
             <a href="{% url 'cuenta' %}" class="list-group-item list-group-item-action" aria-current="true">
               Mis Compras
             </a>
-            <a href="{% url 'suscripcionAdmin' %}" class="list-group-item list-group-item-action  btn btn-verde">Mi
+            <a href="{% url 'miSuscripcion' %}" class="list-group-item list-group-item-action  btn btn-verde">Mi
               Suscripción</a>
           </div>
         </div>
@@ -42,7 +42,7 @@
         <a href="{% url 'suscripcion' %}" class="btn btn-verde">Iniciar Suscripcion</a>
       {% else %}
         <h5 class="">Mi Suscripción</h5>
-        <h5 class="text-muted">Tienes activa la suscripción {{suscripcionCliente.suscripcion.nombre}} </h5>
+        <h5 class="text-muted">Tu suscripcion esta activa! </h5>
         <a href="{% url 'suscripcion' %}" class="btn btn-verde">Administrar</a>
       {% endif %}
     </div>

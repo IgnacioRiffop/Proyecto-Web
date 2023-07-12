@@ -34,9 +34,11 @@
         <div class="col-12">
           {% if user.is_authenticated %}
           <div class="col-12">
+            <p class="fs-6 my-1">Stock: {{ producto.stock }}</p>
             <input type="submit" class="btn btn-verde btn-lg my-3" value="Agregar al carrito">
           </div>
           {% else %}
+          <p class="fs-6 my-1">Stock: {{ producto.stock }}</p>
           <a href="carrito.html" class="btn btn-success btn-lg mt-3 disabled">Agregar al carrito</a>
           <div class="d-flex gap-1 mt-1">
             <a href="{% url 'registro' %}" class="text-decoration-none fw-semibold ltr-verde">Regístrate</a>

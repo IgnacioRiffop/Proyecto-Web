@@ -16,7 +16,7 @@
       <div class="row perfil">
         <div class="col-sm-12 bg-white p-5 rounded-4 text-dark shadow">
           <h3>Mi Cuenta</h3>
-          <h5>Hola, Ignacio</h5>
+          <h5>Hola, {{user.username}}</h5>
           <div class="list-group my-3">
             <a href="{% url 'cuenta' %}" class="list-group-item list-group-item-action btn btn-verde"
               aria-current="true">
@@ -35,38 +35,28 @@
     <!-- Lateral der -->
     <div class="col-sm-9">
       <h5 class="">Mis Compras</h5>
-      <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img src="{% static 'core/img/collarblanco.jpg' %}" class="img-fluid rounded-start" alt="...">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Pedido N°102</h5>
-              <p class="card-text">Estado: Pendiente de envio.</p>
-              <p class="card-text"><small class="text-body-secondary">Fecha: 09/04/2023</small></p>
-              <a href="{% url 'compra' %}" class="btn btn-verde btn-sm">Ver Más</a>
+        {% if existe == False %}
+          <h5 class="text-muted">No hay ninguna compra realizada.</h5>
+        {% endif %}
+        {% for compra in listado %}
+          <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="{{ compra.carrito.producto.imagen.url }}" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{compra.carrito.producto.nombre}}</h5>
+                  <p class="card-text">Compra: {{compra.codigo}}</p>
+                  <p class="card-text">Estado: {{compra.estado}}</p>
+                  <p class="card-text"><small class="text-body-secondary">Fecha: {{compra.fecha}}</small></p>
+                  <a href="{% url 'compra' compra.id %}" class="btn btn-verde">Ver Más</a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img src="{% static 'core/img/collarnegrocat.png' %}" class="img-fluid rounded-start" alt="...">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Pedido N°53</h5>
-              <p class="card-text">Estado: Pedido entregado.</p>
-              <p class="card-text"><small class="text-body-secondary">Fecha: 11/03/2023</small></p>
-              <a href="compra2.html" class="btn btn-verde btn-sm">Ver Más</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
+        {% endfor %}
+        {% include 'core/paginator.html' %}
       <!-- Fin Lateral der -->
     </div>
   </div>

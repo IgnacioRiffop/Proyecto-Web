@@ -1,10 +1,10 @@
 # FORMULARIO PARA AGREGAR Y ACTUALIZAR 
 from django import forms
 from django.forms import ModelForm
+from django.contrib.auth.forms import UserCreationForm  
 from .models import *
 
 class ProductoForm (ModelForm):
-        
     nombre = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Ingrese Nombre"}))
     precio = forms.IntegerField(min_value=0,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Precio"}))
     stock = forms.IntegerField(min_value=0,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Stock"}))
@@ -20,6 +20,12 @@ class ProductoForm (ModelForm):
         }
 
 
+class RegistroForm (UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username','email','password1','password2']
+
+
 class CantidadForm (ModelForm):
     cantidad = forms.IntegerField(min_value=1 ,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Cantidad"}))
 
@@ -27,6 +33,7 @@ class CantidadForm (ModelForm):
         model = Carrito
         fields = ['cantidad']
 
+"""
 class CarritoForm (ModelForm):
     cliente = forms.CharField()
     producto = forms.IntegerField()
@@ -35,6 +42,7 @@ class CarritoForm (ModelForm):
     class Meta:
         model = Carrito
         fields = ['cantidad']
+"""
 
 class envioForm (ModelForm):
     direccion = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Ingrese Dirección"}))
@@ -43,3 +51,5 @@ class envioForm (ModelForm):
     class Meta:
         model = Compras
         fields = ['direccion','contacto']
+
+

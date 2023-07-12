@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% load static%}
+
+{% block css %}
+  
+{% endblock %}
+
+<!-- INICIO CONTENIDO-->
+{% block contenido %}
+
+<div class="p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal">Administración de Seguimientos</h1>
+</div>
+
+<!-- Tienda -->
+<div class="album py-1 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for compra in listado %}
+        <div class="card mb-3" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{ compra.carrito.producto.imagen.url }}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{compra.carrito.producto.nombre}}</h5>
+                <p class="card-text">Compra: {{compra.codigo}}</p>
+                <p class="card-text">Estado: {{compra.estado}}</p>
+                <p class="card-text"><small class="text-body-secondary">Fecha: {{compra.fecha}}</small></p>
+                <a href="{% url 'seguimiento' compra.id %}" class="btn btn-verde">Cambiar Estado</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<a href="{% url 'seguimiento' compra.id %}" class="btn btn-verde">{{compra.carrito.producto.nombre}} {{compra.codigo}}</a>-->
+      {% endfor %}
+    </div>
+    <br>
+    {% include 'core/paginator.html' %}
+  </div>
+</div>
+<!-- Fin Tienda-->
+
+
+{% endblock %}
+<!-- FIN CONTENIDO -->
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'core/js/mensajeProducto.js' %}"></script>
+{% endblock %}

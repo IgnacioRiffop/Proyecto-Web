@@ -6,6 +6,8 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('productos', ProductoViewset)
 router.register('tipoproductos', TipoProductoViewset)
+router.register('tiposuscripcion', TipoSuscripcionViewset)
+router.register('suscripcion', SuscripcionViewset)
 
 ## SE VAN A CREAR TODAS LAS URLS
 urlpatterns = [
@@ -13,16 +15,23 @@ urlpatterns = [
     path('api/', include(router.urls)),
     #RUTAS
     path('', index, name="index"),
-    path('indexApi/', indexApi, name="indexApi"),
-    path('indexSesion', indexSesion, name="indexSesion"),
+    #path('indexApi/', indexApi, name="indexApi"),
+    #path('indexSesion', indexSesion, name="indexSesion"),
     path('addProducto', addProducto, name="addProducto"),
     path('updateProducto/<id>/', updateProducto, name="updateProducto"),
     path('deleteProducto/<id>/', deleteProducto, name="deleteProducto"),
     path('deleteCarrito/<id>/', deleteCarrito, name="deleteCarrito"),
-    path('tiendaSesion', tiendaSesion, name="tiendaSesion"),
-    path('productoSesion', productoSesion, name="productoSesion"),
+    path('agregarCompra/', agregarCompra, name="agregarCompra"),
+    path('adminSeguimiento/', adminSeguimiento, name="adminSeguimiento"),
+    path('seguimiento/<id>/', seguimiento, name="seguimiento"),
+    path('estadoValidacion/<id>/', estadoValidacion, name="estadoValidacion"),
+    path('estadoPreparacion/<id>/', estadoPreparacion, name="estadoPreparacion"),
+    path('estadoReparto/<id>/', estadoReparto, name="estadoReparto"),
+    path('estadoEntregado/<id>/', estadoEntregado, name="estadoEntregado"),
+    #path('tiendaSesion', tiendaSesion, name="tiendaSesion"),
+    #path('productoSesion', productoSesion, name="productoSesion"),
     path('carrito/', carrito, name="carrito"),
-    path('compra/', compra, name="compra"),
+    path('compra/<id>', compra, name="compra"),
     path('cuenta/', cuenta, name="cuenta"),
     path('tienda/', tienda, name="tienda"),
     path('login/', login, name="login"),
@@ -33,9 +42,9 @@ urlpatterns = [
     path('addSuscripcion/<id>/', addSuscripcion, name="addSuscripcion"),
     path('deleteSuscripcion/<id>/', deleteSuscripcion, name="deleteSuscripcion"),
     path('updateSuscripcion/<id>/', updateSuscripcion, name="updateSuscripcion"),
-    path('suscripcionAdmin/', suscripcionAdmin, name="suscripcionAdmin"),
-    path('voucher/', voucher, name="voucher"),
-    path('recuperarPass/', recuperarPass, name="recuperarPass"),
+    #path('suscripcionAdmin/', suscripcionAdmin, name="suscripcionAdmin"),
+    #path('voucher/', voucher, name="voucher"),
+    #path('recuperarPass/', recuperarPass, name="recuperarPass"),
     path('base/', base, name="base"),
     path('administracion/', administracion, name="administracion"),
     path('adminProductos/', adminProductos, name="adminProductos"),
